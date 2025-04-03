@@ -1,0 +1,16 @@
+GET http://localhost:5000/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlcm91YWNoaTgwQGdtYWlsLmNvbSIsInN1YiI6MSwicm9sZSI6IkFkbWluIiwiaWF0IjoxNzQyODUxNDE1LCJleHAiOjE3NDI4NTUwMTV9.0mhUWLnTQvYMwYgsF7WQ6FooGWVWZA-XlvYlUkLz5F8
+
+
+POST http://localhost:5000/users
+Content-Type: application/json
+
+
+{
+  "firstName": "Mouna",
+  "lastName": "DD",
+  "email": "derouachi30@gmail.com",
+  "password": "securepassword",
+  "role": "Hotliner",
+  "phoneNumber": "0645364051"
+}
