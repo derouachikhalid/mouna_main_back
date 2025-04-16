@@ -4,8 +4,10 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   BeforeInsert,
+  ManyToMany,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
+import { Maintenance } from 'src/maintenances/entities/maintenance.entity';
 
 export enum UserRole {
   ADMIN = 'Admin',
@@ -38,6 +40,9 @@ export class User {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @ManyToMany(() => Maintenance, (maintenance) => maintenance.techniciens)
+  maintenances: Maintenance[];
 
   // Hash the password before saving
   @BeforeInsert()

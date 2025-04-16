@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Maintenance } from 'src/maintenances/entities/maintenance.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('machines')
 export class Machine {
@@ -22,4 +23,7 @@ export class Machine {
 
   @Column({ type: 'text', nullable: true })
   pannes_frequentes: string;
+
+  @OneToMany(() => Maintenance, (m) => m.machine)
+  maintenance: Maintenance[];
 }

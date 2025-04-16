@@ -1,0 +1,11 @@
+POST http://localhost:5000/maintenances
+Content-Type: application/json
+
+{
+  "machine_id": 1,
+  "technicien_ids": [1, 3],
+  "type": "Préventive",
+  "description": "Nettoyage régulier du système",
+  "date_prevue": "2025-04-20",
+  "etat": "Planifiée"
+}
