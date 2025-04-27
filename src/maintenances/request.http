@@ -9,3 +9,7 @@ Content-Type: application/json
   "date_prevue": "2025-04-20",
   "etat": "Planifiée"
 }
+
+####
+
+GET http://localhost:5000/maintenances?type=Préventive&page=1&limit=5&orderBy=date_prevue&orderDirection=ASC

@@ -7,6 +7,7 @@ import {
   Patch,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { MachinesService } from './machines.service';
 import { Machine } from './entities/machine.entity';
@@ -14,6 +15,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { UserRole } from 'src/users/entities/user.entity';
 import { Roles } from 'src/auth/roles.decorator';
+import { FindMachineDto } from './dtos/find-machine.dto';
 
 @Controller('machines')
 export class MachinesController {
@@ -22,8 +24,9 @@ export class MachinesController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(UserRole.ADMIN)
   @Get()
-  findAll(): Promise<Machine[]> {
-    return this.machinesService.findAll();
+  @Get()
+  findAll(@Query() query: FindMachineDto) {
+    return this.machinesService.findAll(query);
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)

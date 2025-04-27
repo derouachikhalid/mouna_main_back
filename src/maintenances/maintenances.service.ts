@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Maintenance } from './entities/maintenance.entity';
 import { Machine } from '../machines/entities/machine.entity';
 import { User } from '../users/entities/user.entity';
+import { FindMaintenanceDto } from './dtos/find-maintenance.dto';
 
 @Injectable()
 export class MaintenancesService {
@@ -18,8 +19,52 @@ export class MaintenancesService {
     private userRepo: Repository<User>,
   ) {}
 
-  findAll() {
-    return this.maintenanceRepo.find();
+  async findAll(filters: FindMaintenanceDto) {
+    const {
+      page = 1,
+      limit = 10,
+      orderBy = 'date_creation',
+      orderDirection = 'DESC',
+    } = filters;
+
+    const query = this.maintenanceRepo
+      .createQueryBuilder('maintenance')
+      .leftJoinAndSelect('maintenance.techniciens', 'technicien')
+      .leftJoinAndSelect('maintenance.machine', 'machine');
+
+    if (filters.type) {
+      query.andWhere('maintenance.type = :type', { type: filters.type });
+    }
+
+    if (filters.etat) {
+      query.andWhere('maintenance.etat = :etat', { etat: filters.etat });
+    }
+
+    if (filters.technicienId) {
+      query.andWhere('technicien.user_id = :technicienId', {
+        technicienId: filters.technicienId,
+      });
+    }
+
+    if (filters.search) {
+      query.andWhere('maintenance.description LIKE :search', {
+        search: `%${filters.search}%`,
+      });
+    }
+
+    query
+      .orderBy(`maintenance.${orderBy}`, orderDirection)
+      .skip((page - 1) * limit)
+      .take(limit);
+
+    const [data, total] = await query.getManyAndCount();
+
+    return {
+      data,
+      total,
+      page,
+      lastPage: Math.ceil(total / limit),
+    };
   }
 
   findOne(id: number) {

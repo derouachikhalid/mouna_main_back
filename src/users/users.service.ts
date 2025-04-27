@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User, UserRole } from './entities/user.entity';
+import { FindUserDto } from './dtos/find-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -10,8 +11,40 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+  async findAll(filters: FindUserDto) {
+    const {
+      page = 1,
+      limit = 10,
+      orderBy = 'date_creation',
+      orderDirection = 'DESC',
+    } = filters;
+
+    const query = this.usersRepository.createQueryBuilder('user');
+
+    if (filters.role) {
+      query.andWhere('user.role = :role', { role: filters.role });
+    }
+
+    if (filters.search) {
+      query.andWhere(
+        '(user.nom LIKE :search OR user.prenom LIKE :search OR user.email LIKE :search)',
+        { search: `%${filters.search}%` },
+      );
+    }
+
+    query
+      .orderBy(`user.${orderBy}`, orderDirection)
+      .skip((page - 1) * limit)
+      .take(limit);
+
+    const [data, total] = await query.getManyAndCount();
+
+    return {
+      data,
+      total,
+      page,
+      lastPage: Math.ceil(total / limit),
+    };
   }
 
   findOne(id: number): Promise<User | null> {

@@ -6,16 +6,19 @@ import {
   Body,
   Patch,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { MaintenancesService } from './maintenances.service';
+import { Maintenance } from './entities/maintenance.entity';
+import { FindMaintenanceDto } from './dtos/find-maintenance.dto';
 
 @Controller('maintenances')
 export class MaintenancesController {
   constructor(private readonly maintService: MaintenancesService) {}
 
   @Get()
-  findAll() {
-    return this.maintService.findAll();
+  findAll(@Query() query: FindMaintenanceDto) {
+    return this.maintService.findAll(query);
   }
 
   @Get(':id')
