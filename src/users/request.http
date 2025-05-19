@@ -1,0 +1,15 @@
+GET http://localhost:5000/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlcm91YWNoaTMwQGdtYWlsLmNvbSIsInN1YiI6MSwicm9sZSI6IkFkbWluIiwiaWF0IjoxNzQ3NTAzOTEyLCJleHAiOjE3NDc1MDc1MTJ9.JpyK4FngM7IvwMNrnl9nbRH2OHBVkJeFJLShHN-vw_0
+
+##### 
+POST http://localhost:5000/users
+Content-Type: application/json
+
+{
+  "firstName": "Amina",
+  "lastName": "DD",
+  "email": "derouachi80@gmail.com",
+  "password": "securepassword",
+  "role": "Hotliner",
+  "phoneNumber": "0645364051"
+}
